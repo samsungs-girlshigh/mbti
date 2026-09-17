@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퐁퐁 MBTI 성격유형 진단 🎀</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts (Jua, Gowun Dodum) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti for result celebrate -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Gowun Dodum', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #f0f4ff 50%, #fff9e6 100%);
+            min-height: 100vh;
+        }
+
+        .title-font {
+            font-family: 'Jua', sans-serif;
+        }
+
+        /* Pastel custom shadows and soft rounded look */
+        .cute-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border: 3px solid #ffe3ec;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.25);
+            border-radius: 2.5rem;
+        }
+
+        .cute-button {
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 9999px;
+        }
+
+        .cute-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 20px rgba(255, 154, 162, 0.35);
+        }
+
+        .cute-button:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Gradient progress bar */
+        .progress-fill {
+            transition: width 0.4s ease-out;
+            background: linear-gradient(90deg, #ffb7b2 0%, #ffdac1 50%, #e2f0cb 100%);
+        }
+
+        /* Radio option bubble effect */
+        .option-bubble {
+            transition: all 0.2s ease;
+        }
+
+        .option-bubble.selected {
+            background-color: #ffd1dc !important;
+            border-color: #ff85a1 !important;
+            color: #721c24 !important;
+            font-weight: bold;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 133, 161, 0.3);
+        }
+
+        /* Floating background decoration animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+
+        .floating-icon {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .floating-delay-1 { animation-delay: 1s; }
+        .floating-delay-2 { animation-delay: 2s; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fff0f5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ffc0cb;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 min-h-screen text-gray-700 relative overflow-x-hidden">
+
+    <div class="fixed top-10 left-5 text-4xl floating-icon opacity-60 pointer-events-none select-none">🌸</div>
+    <div class="fixed top-20 right-8 text-4xl floating-icon floating-delay-1 opacity-60 pointer-events-none select-none">🎀</div>
+    <div class="fixed bottom-12 left-8 text-4xl floating-icon floating-delay-2 opacity-60 pointer-events-none select-none">🧸</div>
+    <div class="fixed bottom-16 right-6 text-4xl floating-icon opacity-60 pointer-events-none select-none">✨</div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="w-full max-w-2xl my-auto z-10">
+
+        <!-- START PAGE -->
+        <section id="start-page" class="cute-card p-6 md:p-10 text-center relative overflow-hidden">
+            <div class="inline-block bg-pink-100 text-pink-500 font-bold px-4 py-1.5 rounded-full text-sm mb-4">
+                ✨ 나를 알아가는 러블리 시간 ✨
+            </div>
+            
+            <h1 class="title-font text-3xl md:text-5xl text-pink-400 mb-3 drop-shadow-sm leading-tight">
+                퐁퐁 MBTI <br class="sm:hidden">성격유형 진단 🎀
+            </h1>
+            
+            <p class="text-gray-600 mb-8 text-base md:text-lg leading-relaxed">
+                24가지 소소한 질문을 통해 <br class="hidden sm:inline">
+                숨겨진 나의 진짜 성격과 매력을 찾아보세요! 💕
+            </p>
+
+            <div class="my-6 flex justify-center">
+                <div class="relative w-36 h-36 bg-pink-50 rounded-full flex items-center justify-center border-4 border-pink-200 shadow-inner">
+                    <span class="text-6xl">🐣</span>
+                    <span class="absolute -top-1 -right-1 text-2xl">✨</span>
+                </div>
+            </div>
+
+            <!-- Name Input -->
+            <div class="mb-8 max-w-xs mx-auto">
+                <label for="user-name" class="block text-sm font-bold text-gray-500 mb-2">당신의 예쁜 이름(닉네임)을 알려주세요!</label>
+                <input type="text" id="user-name" placeholder="예: 공주님, 뽀로로" 
+                    class="w-full px-5 py-3 rounded-full border-2 border-pink-200 focus:border-pink-400 focus:outline-none text-center text-gray-700 bg-white/80 transition shadow-sm mb-4">
+
+                <div class="bg-pink-50/80 p-3.5 rounded-2xl border border-pink-200 text-left shadow-inner">
+                    <label for="script-url" class="block text-xs font-bold text-pink-500 mb-1 flex items-center gap-1">
+                        <i class="fa-solid fa-file-csv"></i> 구글 시트 연동 URL (선택)
+                    </label>
+                    <input type="text" id="script-url" placeholder="https://script.google.com/macros/s/.../exec" 
+                        class="w-full px-3 py-2 text-xs rounded-xl border border-pink-200 focus:border-pink-400 focus:outline-none text-gray-600 bg-white">
+                    <p class="text-[10px] text-gray-400 mt-1">* Apps Script 웹 앱 URL을 넣으면 결과가 구글 시트에 자동 저장됩니다!</p>
+                </div>
+            </div>
+
+            <button onclick="startTest()" class="cute-button w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-pink-400 to-rose-300 text-white font-bold text-xl shadow-lg border-2 border-white">
+                진단 시작하기 🎉
+            </button>
+
+            <div class="mt-6 text-xs text-gray-400 flex justify-center gap-4">
+                <span>⏱️ 소요시간 약 3분</span>
+                <span>•</span>
+                <span>총 24문항</span>
+                <span>•</span>
+                <span>5점 척도</span>
+            </div>
+        </section>
+
+
+        <!-- QUESTION PAGE -->
+        <section id="question-page" class="cute-card p-6 md:p-10 hidden">
+            <!-- Header & Progress -->
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2 text-sm font-bold">
+                    <span id="part-indicator" class="text-pink-400 bg-pink-100 px-3 py-1 rounded-full text-xs">Part 1. 에너지 방향</span>
+                    <span id="progress-text" class="text-pink-400 title-font text-base">1 / 24</span>
+                </div>
+                <div class="w-full bg-pink-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-pink-200">
+                    <div id="progress-bar" class="progress-fill h-full rounded-full w-0"></div>
+                </div>
+            </div>
+
+            <!-- Question Card Container -->
+            <div class="bg-white/70 p-6 md:p-8 rounded-3xl border-2 border-pink-100 mb-6 shadow-sm min-h-[180px] flex flex-col justify-center text-center">
+                <span id="q-category" class="text-xs text-rose-400 font-bold mb-2 tracking-wider">[ 질문 테마 ]</span>
+                <h2 id="q-title" class="title-font text-xl md:text-2xl text-gray-800 leading-snug mb-3">
+                    질문 내용이 여기에 들어갑니다.
+                </h2>
+                <p id="q-guide" class="text-xs md:text-sm text-gray-400">
+                    (1점: 전혀 아니다 ↔ 5점: 매우 그렇다)
+                </p>
+            </div>
+
+            <!-- 5-Point Likert Scale Selector -->
+            <div class="mb-8">
+                <div class="flex justify-between text-xs md:text-sm font-bold text-gray-400 mb-3 px-2">
+                    <span class="text-pink-400">전혀 아니다 <br>(1점)</span>
+                    <span class="text-gray-400 self-center">보통이다 (3점)</span>
+                    <span class="text-purple-400 text-right">매우 그렇다 <br>(5점)</span>
+                </div>
+
+                <div class="grid grid-cols-5 gap-2 md:gap-3">
+                    <button onclick="selectOption(1)" class="option-btn option-bubble py-4 md:py-5 rounded-2xl border-2 border-pink-100 bg-white text-gray-600 font-bold text-lg hover:border-pink-300">1</button>
+                    <button onclick="selectOption(2)" class="option-btn option-bubble py-4 md:py-5 rounded-2xl border-2 border-pink-100 bg-white text-gray-600 font-bold text-lg hover:border-pink-300">2</button>
+                    <button onclick="selectOption(3)" class="option-btn option-bubble py-4 md:py-5 rounded-2xl border-2 border-pink-100 bg-white text-gray-600 font-bold text-lg hover:border-pink-300">3</button>
+                    <button onclick="selectOption(4)" class="option-btn option-bubble py-4 md:py-5 rounded-2xl border-2 border-pink-100 bg-white text-gray-600 font-bold text-lg hover:border-pink-300">4</button>
+                    <button onclick="selectOption(5)" class="option-btn option-bubble py-4 md:py-5 rounded-2xl border-2 border-pink-100 bg-white text-gray-600 font-bold text-lg hover:border-pink-300">5</button>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between items-center gap-4">
+                <button id="prev-btn" onclick="prevQuestion()" class="cute-button px-5 py-3 bg-gray-100 text-gray-500 font-bold text-sm hover:bg-gray-200">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> 이전
+                </button>
+                <span class="text-xs text-gray-400">선택하면 자동으로 넘어갑니다! ✨</span>
+            </div>
+        </section>
+
+
+        <!-- LOADING PAGE -->
+        <section id="loading-page" class="cute-card p-10 text-center hidden">
+            <div class="py-12">
+                <div class="inline-block animate-bounce mb-6">
+                    <span class="text-7xl">🔮</span>
+                </div>
+                <h2 class="title-font text-2xl md:text-3xl text-pink-400 mb-3">
+                    성격 유형 분석 중...
+                </h2>
+                <p id="loading-text" class="text-gray-500 text-sm md:text-base">
+                    마법의 구슬이 <span id="loading-name" class="font-bold text-pink-500">사용자</span>님의 MBTI를 읽어내고 있어요! ✨
+                </p>
+                
+                <div class="mt-8 max-w-xs mx-auto">
+                    <div class="w-full bg-pink-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-pink-400 h-full animate-pulse w-full"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- RESULT PAGE -->
+        <section id="result-page" class="cute-card p-6 md:p-10 hidden">
+            <!-- Header Badges -->
+            <div class="text-center mb-6">
+                <span class="bg-rose-100 text-rose-500 font-bold px-4 py-1.5 rounded-full text-xs md:text-sm inline-block mb-2">
+                    💖 <span id="result-username">공주</span>님의 최종 분석 결과
+                </span>
+                <h2 id="result-mbti" class="title-font text-5xl md:text-6xl text-pink-500 my-2 tracking-wider drop-shadow-sm">
+                    ENFP
+                </h2>
+                <h3 id="result-title" class="title-font text-xl md:text-2xl text-purple-600 mb-2">
+                    "재기발랄한 호기심 대장 🌈"
+                </h3>
+                <p id="result-one-liner" class="text-sm text-gray-500 max-w-md mx-auto italic">
+                    "어디로 튀는지 모르는 귀여운 에너자이저!"
+                </p>
+            </div>
+
+            <!-- Character/Illustration Banner -->
+            <div class="bg-gradient-to-r from-pink-100 via-purple-100 to-indigo-100 rounded-3xl p-6 mb-8 text-center border-2 border-white shadow-inner flex flex-col items-center">
+                <div id="result-emoji" class="text-7xl mb-3">🎨</div>
+                <div id="result-summary-box" class="bg-white/80 p-4 rounded-2xl text-xs md:text-sm text-gray-700 leading-relaxed max-w-lg">
+                    설명이 생성됩니다.
+                </div>
+            </div>
+
+            <!-- 4 Spectrum Scores Section -->
+            <div class="mb-8 bg-white/70 p-5 md:p-6 rounded-3xl border border-pink-100">
+                <h4 class="title-font text-lg text-gray-700 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-pink-400"></i> 세부 선호 지표 분석
+                </h4>
+
+                <div class="space-y-4 text-xs md:text-sm font-bold">
+                    <!-- E vs I -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span id="score-label-e" class="text-pink-500">E (외향) 0%</span>
+                            <span id="score-label-i" class="text-purple-500">I (내향) 0%</span>
+                        </div>
+                        <div class="w-full bg-purple-100 h-3 rounded-full overflow-hidden flex">
+                            <div id="bar-e" class="bg-pink-400 h-full transition-all duration-500" style="width: 50%;"></div>
+                            <div id="bar-i" class="bg-purple-300 h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- S vs N -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span id="score-label-s" class="text-amber-500">S (감각) 0%</span>
+                            <span id="score-label-n" class="text-emerald-500">N (직관) 0%</span>
+                        </div>
+                        <div class="w-full bg-emerald-100 h-3 rounded-full overflow-hidden flex">
+                            <div id="bar-s" class="bg-amber-300 h-full transition-all duration-500" style="width: 50%;"></div>
+                            <div id="bar-n" class="bg-emerald-400 h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- T vs F -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span id="score-label-t" class="text-blue-500">T (사고) 0%</span>
+                            <span id="score-label-f" class="text-rose-500">F (감정) 0%</span>
+                        </div>
+                        <div class="w-full bg-rose-100 h-3 rounded-full overflow-hidden flex">
+                            <div id="bar-t" class="bg-blue-300 h-full transition-all duration-500" style="width: 50%;"></div>
+                            <div id="bar-f" class="bg-rose-400 h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                    </div>
+
+                    <!-- J vs P -->
+                    <div>
+                        <div class="flex justify-between mb-1">
+                            <span id="score-label-j" class="text-indigo-500">J (판단) 0%</span>
+                            <span id="score-label-p" class="text-orange-500">P (인식) 0%</span>
+                        </div>
+                        <div class="w-full bg-orange-100 h-3 rounded-full overflow-hidden flex">
+                            <div id="bar-j" class="bg-indigo-300 h-full transition-all duration-500" style="width: 50%;"></div>
+                            <div id="bar-p" class="bg-orange-400 h-full transition-all duration-500" style="width: 50%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analysis Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <!-- Characteristics -->
+                <div class="bg-pink-50/80 p-5 rounded-3xl border border-pink-200">
+                    <h5 class="title-font text-pink-500 text-base mb-2 flex items-center gap-1.5">
+                        <span>✨</span> 성격 핵심 포인트
+                    </h5>
+                    <ul id="result-traits" class="text-xs md:text-sm text-gray-600 space-y-1.5 list-disc list-inside">
+                        <li>특징 1</li>
+                        <li>특징 2</li>
+                    </ul>
+                </div>
+
+                <!-- Best Compatibility -->
+                <div class="bg-purple-50/80 p-5 rounded-3xl border border-purple-200">
+                    <h5 class="title-font text-purple-500 text-base mb-2 flex items-center gap-1.5">
+                        <span>👭</span> 환상의 짝꿍 (케미)
+                    </h5>
+                    <p id="result-match" class="text-xs md:text-sm text-gray-600 leading-relaxed">
+                        케미 정보
+                    </p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="copyResult()" class="cute-button flex-1 py-3.5 bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold rounded-full text-sm shadow">
+                    <i class="fa-regular fa-copy mr-1.5"></i> 결과 링크 복사하기
+                </button>
+                <button onclick="restartTest()" class="cute-button flex-1 py-3.5 bg-white text-pink-400 font-bold rounded-full text-sm border-2 border-pink-300 hover:bg-pink-50">
+                    <i class="fa-solid fa-rotate-left mr-1.5"></i> 다시 진단하기
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        /* ----------------------------------------------------
+           1. MBTI 진단 질문 데이터 (총 24문항)
+           ---------------------------------------------------- */
+        const questions = [
+            // Part 1: E vs I (1 ~ 6)
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "사회적 활동 후 리프레시",
+                title: "힘든 일주일이 끝난 후, 주로 다른 사람들과 만나 대화하거나 야외 활동을 하면서 에너지를 얻는다.",
+                type: "EI"
+            },
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "대화 및 표현 방식",
+                title: "자신의 생각이나 감정을 글로 정리하기보다 말로 즉각 표현하는 것이 편하다.",
+                type: "EI"
+            },
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "새로운 환경 및 대인관계",
+                title: "모르는 사람들이 많은 모임이나 행사장에 가서도 쉽게 타인에게 먼저 말을 건넨다.",
+                type: "EI"
+            },
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "사고 프로세스",
+                title: "충분히 혼자 고뇌한 후 결론을 내리기보다는, 사람들과 이야기하면서 생각을 정리하는 편이다.",
+                type: "EI"
+            },
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "주말 및 휴일의 선호",
+                title: "아무런 외부 약속 없이 집에서 혼자 보낼 때 지루함을 느끼고 밖으로 나가고 싶다.",
+                type: "EI"
+            },
+            {
+                part: "Part 1. 에너지 방향 (E vs I)",
+                category: "관심사의 범주",
+                title: "소수의 깊이 있는 관심사에 오래 몰두하기보다 다양한 분야의 사람들과 다채로운 주제로 교류하는 것을 즐긴다.",
+                type: "EI"
+            },
+
+            // Part 2: S vs N (7 ~ 12)
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "정보 수집 및 관찰",
+                title: "현실적인 사실, 구체적인 데이터, 오감으로 경험할 수 있는 실제 사례보다 아이디어나 숨겨진 의미에 끌린다.",
+                type: "SN"
+            },
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "미래 및 가능성 추구",
+                title: "'현재 존재하는 실제 상태'보다 '앞으로 가능할 비전이나 잠재 가능성'에 더 큰 흥미를 느낀다.",
+                type: "SN"
+            },
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "문제 해결 접근법",
+                title: "검증된 전통적인 방식이나 기존 절차를 따르기보다, 새롭고 독창적인 방식을 시도해보는 것을 선호한다.",
+                type: "SN"
+            },
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "설명 및 대화 스타일",
+                title: "대화할 때 비유, 은유, 상상 속 이야기를 자주 사용하며 비약적인 아이디어 전개를 즐긴다.",
+                type: "SN"
+            },
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "작업 스타일 및 세부사항",
+                title: "디테일하고 꼼꼼한 세부사항을 챙기는 것보다 전체적인 숲(큰 그림)을 파악하는 데 더 강점이 있다.",
+                type: "SN"
+            },
+            {
+                part: "Part 2. 인식 기능 (S vs N)",
+                category: "관심 분야",
+                title: "당장 실생활에 적용할 수 있는 실용적인 기술이나 지식보다, 철학적·이론적인 가설이나 개념에 끌린다.",
+                type: "SN"
+            },
+
+            // Part 3: T vs F (13 ~ 18)
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "의사결정의 기준",
+                title: "피도 눈물도 없는 객관적 원칙이나 규칙보다 사람들의 개인적 사정과 정서적 가치를 우선시한다.",
+                type: "TF"
+            },
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "피드백 및 대화 방식",
+                title: "상대방에게 단점을 지적하고 직설적 솔루션을 주는 것보다 공감과 정서적 지지를 먼저 주는 것이 중요하다.",
+                type: "TF"
+            },
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "갈등 상황 대처",
+                title: "타인과의 갈등이 생겼을 때 상황의 논리적 인과관계를 밝히는 것보다, 서로의 정서적 화합과 기분을 풀어주는 것이 더 중요하다.",
+                type: "TF"
+            },
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "타인의 고민을 들을 때",
+                title: "누군가 불평이나 고민을 털어놓으면 자연스럽게 정서적으로 공감하고 함께 안타까워하게 된다.",
+                type: "TF"
+            },
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "가치관 및 지향점",
+                title: "공정성과 정의를 구현하는 것보다 따뜻한 인류애와 타인을 향한 배려를 실천하는 것이 더 가치 있다.",
+                type: "TF"
+            },
+            {
+                part: "Part 3. 판단 기능 (T vs F)",
+                category: "칭찬 및 인정의 기준",
+                title: "업무나 과제를 할 때 훌륭한 성과나 결과물보다, 그것을 이루기 위해 노력한 마음과 과정에 더 큰 칭찬을 해주고 싶다.",
+                type: "TF"
+            },
+
+            // Part 4: J vs P (19 ~ 24)
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "일정 및 계획 수립",
+                title: "구체적인 시간별 일정표대로 엄격하게 움직이기보다 그날의 기분과 상황에 맞춰 자유롭게 움직이는 것을 좋아한다.",
+                type: "JP"
+            },
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "유연성 및 융통성",
+                title: "상황이 예상과 다르게 흘러가더라도 당황하지 않고, 그 순간의 기분과 상황에 맞춰 즉흥적으로 변경하는 것을 즐긴다.",
+                type: "JP"
+            },
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "마감 기한 임박 시",
+                title: "과제나 업무를 할 때 미리미리 여유 있게 끝내놓기보다, 마감 직전 벼락치기로 집중력을 발휘해 처리하는 편이다.",
+                type: "JP"
+            },
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "환경 정리 및 정돈",
+                title: "책상이나 방 정리가 체계적으로 되어 있지 않더라도 필요한 물건을 찾는 데 불편함이 없으면 크게 신경 쓰지 않는다.",
+                type: "JP"
+            },
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "결정과 선택",
+                title: "신속하게 결론을 내리고 일을 마무리지기보다, 마지막 순간까지 다양한 가능성과 선택지를 열어두는 것을 선호한다.",
+                type: "JP"
+            },
+            {
+                part: "Part 4. 생활 양식 (J vs P)",
+                category: "삶의 스타일",
+                title: "규칙적인 루틴과 예측 가능한 일상보다는, 매일매일이 변화무쌍하고 자율적인 삶을 원한다.",
+                type: "JP"
+            }
+        ];
+
+        /* ----------------------------------------------------
+           2. 16가지 MBTI 세부 정보 DB (여고생 맞춤 톤앤매너)
+           ---------------------------------------------------- */
+        const mbtiDetails = {
+            "ISTJ": {
+                title: "바른생활 피지컬! 꼼꼼 정석반장 📏",
+                oneLiner: "약속 시간 5분 전 도착은 기본! 믿음직한 갓생러",
+                emoji: "🎒",
+                summary: "정리정돈 끝판왕이자 출석률 100% 신뢰의 아이콘! 할 일은 미루지 않고 똑부러지게 해내며 친구들이 믿고 의지하는 든든한 버팀목이에요.",
+                traits: [
+                    "시간 약속과 정해진 규칙을 철저히 지켜요",
+                    "노트 필기가 깔끔해서 친구들이 자주 빌려달라고 해요",
+                    "원리원칙을 중요하게 생각하는 현실주의자!"
+                ],
+                match: "💖 최고의 짝꿍: **ESFP**, **ESTP** (지루할 틈 없는 신나는 단짝!)"
+            },
+            "ISFJ": {
+                title: "배려심 넘치는 천사! 힐러 단짝 🧸",
+                oneLiner: "친구들 기분 다 체크해 주는 세심하고 다정한 수호천사",
+                emoji: "🌸",
+                summary: "조용하지만 마음이 너무 따뜻해서 주위 친구들을 끊임없이 챙겨줘요. 남의 말을 잘 들어주고 감동적인 손편지를 자주 건네는 다정한 스타일!",
+                traits: [
+                    "친구의 조그만 변화나 우울함도 금방 알아채요",
+                    "자신보다 친구를 배려하느라 속으로 혼자 참기도 해요",
+                    "따뜻한 분위기 속에서 깊은 대화를 나누는 걸 좋아해요"
+                ],
+                match: "💖 최고의 짝꿍: **ESFP**, **ESTJ** (우정을 온전히 이해해주는 친구!)"
+            },
+            "INFJ": {
+                title: "신비로운 감성! 은근한 통찰가 🌙",
+                oneLiner: "생각이 깊고 속이 깊어 상담소 역할을 하는 비밀 친구",
+                emoji: "🔮",
+                summary: "겉으로는 조용해 보이지만 속은 아주 깊고 상상력이 풍부해요. 친구들의 고민을 진심으로 같이 아파해주며 혜안을 제시해 주는 영혼의 멘토!",
+                traits: [
+                    "혼자만의 시간을 가지며 감성적인 글이나 다이어리를 써요",
+                    "상대방의 속마음을 한눈에 꿰뚫어 보는 신기한 능력!",
+                    "진정성 있는 일대일 관계를 훨씬 선호해요"
+                ],
+                match: "💖 최고의 짝꿍: **ENFP**, **ENTP** (내 깊은 속마음을 열어주는 인싸 친구!)"
+            },
+            "INTJ": {
+                title: "걸어 다니는 전략가! 똑똑이 올라운더 🧠",
+                oneLiner: "스스로 목표를 정하고 뚝심 있게 달리는 똑똑이",
+                emoji: "🎓",
+                summary: "독립적이고 스마트한 자기관리 끝판왕! 효율과 성장을 중요하게 생각해서 계획을 세우고 하나씩 정복해 나가는 보스 같은 매력이 있어요.",
+                traits: [
+                    "비효율적이거나 쓸데없는 감정 소모를 싫어해요",
+                    "관심 있는 분야는 전문가 수준으로 파고들어요",
+                    "겉은 차가워 보여도 내 사람에게는 확실하게 마음을 줘요"
+                ],
+                match: "💖 최고의 짝꿍: **ENFP**, **ENTP** (새로운 자극과 재미를 선사해 줄 짝꿍!)"
+            },
+            "ISTP": {
+                title: "쿨함 그 자체! 무심한 츤데레 🛠️",
+                oneLiner: "귀찮은 건 딱 질색! 그래도 필요한 순간 등장하는 능력자",
+                emoji: "🎧",
+                summary: "평소엔 마이웨이로 시크해 보이지만, 문제가 생기면 쿨하게 만능 해결사로 변신해요. 효율적인 행동파로 솔직담백한 매력이 넘칩니다.",
+                traits: [
+                    "표정이 늘 담담해서 친구들이 속마음을 궁금해해요",
+                    "벼락치기 성능 최상! 임기응변 능력이 정말 좋아요",
+                    "필요 없는 에너지 소비는 절대 하지 않는 가성비파"
+                ],
+                match: "💖 최고의 짝꿍: **ESFJ**, **ESTJ** (솔직하고 적극적으로 이끌어주는 친구!)"
+            },
+            "ISFP": {
+                title: "말랑말랑 감성 폭발! 방구석 아티스트 🎨",
+                oneLiner: "누워서 폰 보는 게 최고지만 세상 친절한 순둥이",
+                emoji: "🍰",
+                summary: "갈등을 너무 싫어하고 온화하며 평화를 사랑하는 순둥이! 귀여운 소품, 예쁜 카페, 감성 음악을 좋아하고 따뜻한 유대감을 중시해요.",
+                traits: [
+                    "약속 취소되면 속으로 계탔다고 기뻐해요",
+                    "거절을 잘 못해서 당황할 때가 많아요",
+                    "예술적 감각이나 소소한 감성이 아주 매력적이에요"
+                ],
+                match: "💖 최고의 짝꿍: **ENFJ**, **ESFJ** (따뜻하게 끌어주고 챙겨주는 인싸!)"
+            },
+            "INFP": {
+                title: "몽글몽글 감성 시인! 낭만 상상가 ☁️",
+                oneLiner: "머릿속은 유니버스! 우주 최고의 감수성을 가진 말랑이",
+                emoji: "🧸",
+                summary: "마음이 무척 여리고 따뜻해서 조그만 일에도 깊이 감동해요. 혼자 상상하는 공간에서 나만의 세계를 만드는 유니크한 감성 보유자!",
+                traits: [
+                    "좋아하는 아이돌이나 캐릭터에 깊게 입덕해요",
+                    "상처받을까 봐 혼자 속으로 앓을 때가 있어요",
+                    "내 편이 되어주는 친한 친구에게 무한한 애정을 표현해요"
+                ],
+                match: "💖 최고의 짝꿍: **ENFJ**, **ENTJ** (용기를 주고 직진해 주는 든든한 친구!)"
+            },
+            "INTP": {
+                title: "엉뚱발랄 브레인! 호기심천국 🧪",
+                oneLiner: "왜? 라는 질문을 입에 달고 사는 호기심 대장",
+                emoji: "💡",
+                summary: "조용해 보이지만 머릿속은 온갖 신기한 지식과 논리로 가득 차 있어요. 나만의 관심사에 빠지면 날밤을 새우는 직진 탐구파!",
+                traits: [
+                    "남들과는 조금 다른 독특한 유머 감각을 가졌어요",
+                    "감정적인 위로보다는 논리적 원인 분석이 먼저 떠올라요",
+                    "관심 없는 대화에는 영혼 가출 모드가 돼요"
+                ],
+                match: "💖 최고의 짝꿍: **ENTJ**, **ESTJ** (내 아이디어를 실제로 구현해 주는 친구!)"
+            },
+            "ESTP": {
+                title: "오늘을 즐겨라! 스릴 넘치는 액션파 ⚡",
+                oneLiner: "노는 게 제일 좋아! 텐션 터지는 학교의 슈퍼스타",
+                emoji: "🛹",
+                summary: "고민은 짧게, 행동은 빛의 속도! 에너지가 넘치고 상황 판단이 빨라 어딜 가나 인기가 많고 흥을 돋우는 분위기 메이커예요.",
+                traits: [
+                    "복잡한 생각보다는 일단 해보고 직면하는 타입!",
+                    "운동이나 액티비티, 유행하는 미션 도전을 좋아해요",
+                    "뒤끝 없이 솔직하고 매력적인 걸크러시/쿨남!"
+                ],
+                match: "💖 최고의 짝꿍: **ISFJ**, **ISTJ** (안정감 있게 날 받쳐주는 짝꿍!)"
+            },
+            "ESFP": {
+                title: "인간 비타민! 텐션 최상 댄싱머신 🍓",
+                oneLiner: "보는 사람까지 기분 좋아지게 만드는 해피 바이러스",
+                emoji: "🎉",
+                summary: "주위에 사람이 끊이지 않는 자타공인 핵인싸! 넘치는 흥과 친화력으로 누구와도 1분 만에 친해질 수 있는 어마무시한 매력덩어리예요.",
+                traits: [
+                    "주말에 집에만 있으면 몸이 근질거려요",
+                    "친구들의 장기자랑이나 리액션을 담당하고 있어요",
+                    "충동구매나 즉흥 여행의 달인!"
+                ],
+                match: "💖 최고의 짝꿍: **ISFJ**, **ISTJ** (언제나 내 편이 되어주는 다정한 친구!)"
+            },
+            "ENFP": {
+                title: "재기발랄 호기심 대장! 무지개 에너자이저 🌈",
+                oneLiner: "아이디어 폭발! 어디로 튈지 모르는 사랑스러운 존재",
+                emoji: "🍋",
+                summary: "새로운 걸 너무 좋아하고 열정이 폭발하는 리액션 부자! 하고 싶은 것도 많고 궁금한 것도 많아 매일매일이 스펙터클한 주인공이에요.",
+                traits: [
+                    "시작은 창대하나 마무리는 살짝 약한 열정파",
+                    "친구의 슬픔에 내 일처럼 같이 눈물 흘려요",
+                    "긍정적인 에너지로 주위 사람들을 행복하게 만들어요"
+                ],
+                match: "💖 최고의 짝꿍: **INFJ**, **INTJ** (내 텐션을 깊이 있게 받아주는 운명적 단짝!)"
+            },
+            "ENTP": {
+                title: "솔직 당당 개그캐! 아이디어 자판기 💡",
+                oneLiner: "말싸움 절대 안 짐! 토론과 장난을 즐기는 무대 체질",
+                emoji: "🚀",
+                summary: "재치 있는 입담과 독창적인 생각으로 사람들을 사로잡는 분위기 주도자! 선을 넘지 않는 당당함과 장난기로 웃음을 선사해요.",
+                traits: [
+                    "논쟁이나 토론할 때 눈이 초롱초롱해져요",
+                    "틀에 박힌 관습이나 꼰대 문화를 너무 싫어해요",
+                    "자존감이 높고 스스로를 아주 사랑해요"
+                ],
+                match: "💖 최고의 짝꿍: **INFJ**, **INTJ** (나와 끝없는 대화 티키타카가 가능한 단짝!)"
+            },
+            "ESTJ": {
+                title: "똑부러지는 리더! 갓생 살기 전교회장 📋",
+                oneLiner: "계획대로 착착! 책임감과 리더십 200% 능력자",
+                emoji: "👑",
+                summary: "학급 일이나 조별 과제할 때 빛을 발하는 체계적인 리더! 솔선수범하며 친구들을 제대로 끌어주고 확실한 결단력을 보여줍니다.",
+                traits: [
+                    "일정표와 플래너를 쓰는 데서 쾌감을 느껴요",
+                    "할 말은 확실하게 해야 직성이 풀려요",
+                    "친구들의 멘토이자 해결사로 활약해요"
+                ],
+                match: "💖 최고의 짝꿍: **ISFP**, **INTP** (유연하고 내 리더십을 잘 따라주는 친구!)"
+            },
+            "ESFJ": {
+                title: "인싸 중의 인싸! 세심한 케어마스터 🧁",
+                oneLiner: "모두를 챙기는 꼼꼼함! 핵인싸 인맥왕",
+                emoji: "🍬",
+                summary: "생일 챙기기, 기념일 이벤트의 귀재! 친절하고 센스 넘쳐서 학급 전체를 하나로 모으는 친화력 대장이자 공감 부자입니다.",
+                traits: [
+                    "칭찬 한마디에 하루 종일 기분이 날아갈 듯 좋아해요",
+                    "소외되는 친구가 없도록 끊임없이 신경 써요",
+                    "리액션이 아주 커서 대화할 맛 나는 친구!"
+                ],
+                match: "💖 최고의 짝꿍: **ISFP**, **ISTP** (내 케어를 고마워하고 따뜻하게 맞아주는 친구!)"
+            },
+            "ENFJ": {
+                title: "따뜻한 카리스마! 모두의 구원자 🌟",
+                oneLiner: "더 나은 우리를 위해! 주위 사람을 끌어안는 오지랖왕",
+                emoji: "🌷",
+                summary: "타인의 성장을 돕고 용기를 불어넣어 주는 선한 영향력의 선구자! 정의롭고 따뜻해서 누구에게나 사려 깊은 최고의 친구예요.",
+                traits: [
+                    "친구의 가능성을 믿고 용기를 끊임없이 줘요",
+                    "남의 부탁을 거절 못해서 일거리가 쌓이기도 해요",
+                    "모두가 행복해지는 대의를 지향해요"
+                ],
+                match: "💖 최고의 짝꿍: **INFP**, **ISFP** (내 따뜻함과 진심을 온전히 알아주는 단짝!)"
+            },
+            "ENTJ": {
+                title: "야망 넘치는 야심가! 당찬 통솔자 🦁",
+                oneLiner: "목표 달성률 100%! 카리스마 넘치는 야망녀",
+                emoji: "🏆",
+                summary: "자기주관이 뚜렷하고 장기적인 비전을 그리는 당차고 멋진 스타일! 어려운 난관이 와도 포기하지 않고 정면으로 돌파해 냅니다.",
+                traits: [
+                    "자기계발에 진심이며 스펙 쌓기를 좋아해요",
+                    "비효율적인 답답함을 참지 못해요",
+                    "친구들에게 멋진 조언과 비전을 제시해 줘요"
+                ],
+                match: "💖 최고의 짝꿍: **INFP**, **INTP** (창의적이고 세심하게 상보적인 짝꿍!)"
+            }
+        };
+
+        /* ----------------------------------------------------
+           3. 상태 관리 변수
+           ---------------------------------------------------- */
+        let currentIdx = 0;
+        let answers = new Array(24).fill(0);
+        let userName = "공주";
+        let scriptUrl = "";
+
+        /* ----------------------------------------------------
+           4. 테스트 시작 및 네비게이션 함수
+           ---------------------------------------------------- */
+        function startTest() {
+            const inputName = document.getElementById('user-name').value.trim();
+            if (inputName !== "") {
+                userName = inputName;
+            }
+
+            const urlInput = document.getElementById('script-url').value.trim();
+            if (urlInput !== "") {
+                scriptUrl = urlInput;
+            }
+
+            document.getElementById('start-page').classList.add('hidden');
+            document.getElementById('question-page').classList.remove('hidden');
+
+            currentIdx = 0;
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentIdx];
+            
+            // Header info
+            document.getElementById('part-indicator').innerText = q.part;
+            document.getElementById('progress-text').innerText = `${currentIdx + 1} / 24`;
+            
+            // Progress Bar
+            const progressPercent = ((currentIdx + 1) / 24) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Question text
+            document.getElementById('q-category').innerText = `[ ${q.category} ]`;
+            document.getElementById('q-title').innerText = q.title;
+
+            // Reset selected buttons state
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, index) => {
+                const scoreValue = index + 1;
+                if (answers[currentIdx] === scoreValue) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // Prev Button visibility
+            if (currentIdx === 0) {
+                document.getElementById('prev-btn').classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                document.getElementById('prev-btn').classList.remove('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        function selectOption(score) {
+            answers[currentIdx] = score;
+
+            // Update UI selection briefly
+            const buttons = document.querySelectorAll('.option-btn');
+            buttons.forEach((btn, index) => {
+                if (index + 1 === score) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
+
+            // Smooth jump to next question after 200ms
+            setTimeout(() => {
+                if (currentIdx < 23) {
+                    currentIdx++;
+                    renderQuestion();
+                } else {
+                    calculateResult();
+                }
+            }, 200);
+        }
+
+        function prevQuestion() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                renderQuestion();
+            }
+        }
+
+        /* ----------------------------------------------------
+           5. 점수 계산 및 MBTI 판정 알고리즘
+           ---------------------------------------------------- */
+        function calculateResult() {
+            document.getElementById('question-page').classList.add('hidden');
+            document.getElementById('loading-page').classList.remove('hidden');
+            document.getElementById('loading-name').innerText = userName;
+
+            // 영역별 점수 합산 (각 6개 문항)
+            // E vs I (idx: 0~5)
+            let scoreEI = 0;
+            for (let i = 0; i < 6; i++) scoreEI += answers[i];
+
+            // S vs N (idx: 6~11)
+            let scoreSN = 0;
+            for (let i = 6; i < 12; i++) scoreSN += answers[i];
+
+            // T vs F (idx: 12~17)
+            let scoreTF = 0;
+            for (let i = 12; i < 18; i++) scoreTF += answers[i];
+
+            // J vs P (idx: 18~23)
+            let scoreJP = 0;
+            for (let i = 18; i < 24; i++) scoreJP += answers[i];
+
+            /*
+              채점 가이드 기준:
+              영역별 총점 6 ~ 30점
+              6 ~ 17점: I / S / T / J
+              18점: 경계선 (기본적으로 I/S/T/J 쪽으로 포함하되 균형 표시)
+              19 ~ 30점: E / N / F / P
+            */
+            const typeE_I = (scoreEI >= 19) ? 'E' : 'I';
+            const typeS_N = (scoreSN >= 19) ? 'N' : 'S'; // 19 이상이면 N, 18 이하 S
+            const typeT_F = (scoreTF >= 19) ? 'F' : 'T'; // 19 이상이면 F, 18 이하 T
+            const typeJ_P = (scoreJP >= 19) ? 'P' : 'J'; // 19 이상이면 P, 18 이하 J
+
+            const finalMBTI = `${typeE_I}${typeS_N}${typeT_F}${typeJ_P}`;
+
+            // 백분율 계산 (최소 6, 최대 30 -> 범위 24)
+            const percentE = Math.round(((scoreEI - 6) / 24) * 100);
+            const percentI = 100 - percentE;
+
+            const percentN = Math.round(((scoreSN - 6) / 24) * 100);
+            const percentS = 100 - percentN;
+
+            const percentF = Math.round(((scoreTF - 6) / 24) * 100);
+            const percentT = 100 - percentF;
+
+            const percentP = Math.round(((scoreJP - 6) / 24) * 100);
+            const percentJ = 100 - percentP;
+
+            // 로딩 애니메이션 후 결과 표시 (1.5초 후)
+            setTimeout(() => {
+                showResult(finalMBTI, {
+                    percentE, percentI,
+                    percentS, percentN,
+                    percentT, percentF,
+                    percentJ, percentP
+                });
+
+                // 구글 시트 데이터 전송 실행
+                sendResultToGoogleSheet({
+                    userName: userName,
+                    mbti: finalMBTI,
+                    scoreSummary: `E:${scoreEI}, N:${scoreSN}, F:${scoreTF}, P:${scoreJP}`,
+                    scores: {
+                        scoreEI: scoreEI,
+                        scoreSN: scoreSN,
+                        scoreTF: scoreTF,
+                        scoreJP: scoreJP
+                    }
+                });
+            }, 1500);
+        }
+
+        /* ----------------------------------------------------
+           5-1. 구글 시트 데이터 전송 함수
+           ---------------------------------------------------- */
+        function sendResultToGoogleSheet(dataPayload) {
+            if (!scriptUrl) return; // URL 미입력 시 기록 전송 안 함
+
+            fetch(scriptUrl, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(dataPayload)
+            })
+            .then(() => {
+                showToast('📊 구글 시트에 데이터가 성공적으로 기록되었습니다! ✨');
+            })
+            .catch((err) => {
+                console.error('구글 시트 전송 오류:', err);
+            });
+        }
+
+        /* ----------------------------------------------------
+           6. 결과 페이지 렌더링 함수
+           ---------------------------------------------------- */
+        function showResult(mbti, scores) {
+            document.getElementById('loading-page').classList.add('hidden');
+            document.getElementById('result-page').classList.remove('hidden');
+
+            const info = mbtiDetails[mbti] || mbtiDetails["ENFP"];
+
+            // Basic Info
+            document.getElementById('result-username').innerText = userName;
+            document.getElementById('result-mbti').innerText = mbti;
+            document.getElementById('result-title').innerText = info.title;
+            document.getElementById('result-one-liner').innerText = `"${info.oneLiner}"`;
+            document.getElementById('result-emoji').innerText = info.emoji;
+            document.getElementById('result-summary-box').innerText = info.summary;
+
+            // Detailed Traits List
+            const traitsList = document.getElementById('result-traits');
+            traitsList.innerHTML = '';
+            info.traits.forEach(trait => {
+                const li = document.createElement('li');
+                li.innerText = trait;
+                traitsList.appendChild(li);
+            });
+
+            // Match Info
+            document.getElementById('result-match').innerHTML = info.match;
+
+            // Progress Bars & Labels
+            // E vs I
+            document.getElementById('score-label-e').innerText = `E (외향) ${scores.percentE}%`;
+            document.getElementById('score-label-i').innerText = `I (내향) ${scores.percentI}%`;
+            document.getElementById('bar-e').style.width = `${scores.percentE}%`;
+            document.getElementById('bar-i').style.width = `${scores.percentI}%`;
+
+            // S vs N
+            document.getElementById('score-label-s').innerText = `S (감각) ${scores.percentS}%`;
+            document.getElementById('score-label-n').innerText = `N (직관) ${scores.percentN}%`;
+            document.getElementById('bar-s').style.width = `${scores.percentS}%`;
+            document.getElementById('bar-n').style.width = `${scores.percentN}%`;
+
+            // T vs F
+            document.getElementById('score-label-t').innerText = `T (사고) ${scores.percentT}%`;
+            document.getElementById('score-label-f').innerText = `F (감정) ${scores.percentF}%`;
+            document.getElementById('bar-t').style.width = `${scores.percentT}%`;
+            document.getElementById('bar-f').style.width = `${scores.percentF}%`;
+
+            // J vs P
+            document.getElementById('score-label-j').innerText = `J (판단) ${scores.percentJ}%`;
+            document.getElementById('score-label-p').innerText = `P (인식) ${scores.percentP}%`;
+            document.getElementById('bar-j').style.width = `${scores.percentJ}%`;
+            document.getElementById('bar-p').style.width = `${scores.percentP}%`;
+
+            // Trigger Confetti Effect 🎉
+            try {
+                confetti({
+                    particleCount: 80,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            } catch (e) {
+                console.log('Confetti effect failed:', e);
+            }
+        }
+
+        /* ----------------------------------------------------
+           7. 공유 및 다시하기 기능
+           ---------------------------------------------------- */
+        function copyResult() {
+            const mbti = document.getElementById('result-mbti').innerText;
+            const textToCopy = `[퐁퐁 MBTI 진단 결과] ${userName}님의 성격유형은 ${mbti}입니다! 🎀\n너도 당신의 성격을 테스트해봐! 💕`;
+            
+            // Clipboard fallback logic
+            const tempInput = document.createElement('textarea');
+            tempInput.value = textToCopy;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+
+            // Floating Custom Toast Notification
+            showToast('결과 메시지가 클립보드에 복사되었어요! 💌');
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs md:text-sm px-6 py-3 rounded-full shadow-2xl z-50 transition-all duration-300 opacity-0';
+            toast.innerText = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('opacity-100'), 10);
+            setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                setTimeout(() => document.body.removeChild(toast), 300);
+            }, 2500);
+        }
+
+        function restartTest() {
+            answers = new Array(24).fill(0);
+            currentIdx = 0;
+            document.getElementById('result-page').classList.add('hidden');
+            document.getElementById('start-page').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
